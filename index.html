@@ -13,6 +13,10 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Outfit', sans-serif;
@@ -22,19 +26,20 @@
       justify-content: center;
       height: 100vh;
       padding: 20px;
+      overflow: hidden;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 25px;
       padding: 30px 25px;
+      width: 100%;
+      max-width: 340px;
       text-align: center;
       color: #fff;
-      width: 100%;
-      max-width: 320px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
     h1 {
@@ -45,20 +50,20 @@
 
     input {
       width: 100%;
-      padding: 10px 14px;
+      padding: 14px 16px;
       border: none;
-      border-radius: 10px;
-      margin-bottom: 15px;
+      border-radius: 14px;
       font-size: 16px;
       outline: none;
+      margin-bottom: 16px;
     }
 
     button {
-      background-color: #ffffff;
+      background-color: #fff;
       color: #ff69b4;
       border: none;
-      padding: 10px 20px;
-      border-radius: 12px;
+      padding: 12px 24px;
+      border-radius: 16px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
@@ -71,7 +76,7 @@
     }
 
     #sentMsg {
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 14px;
       color: #fff;
       opacity: 0;
@@ -80,6 +85,25 @@
 
     #sentMsg.visible {
       opacity: 1;
+    }
+
+    .butterfly {
+      position: absolute;
+      font-size: 24px;
+      animation: fly 3s ease-in-out forwards;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    @keyframes fly {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-300px) rotate(360deg);
+        opacity: 0;
+      }
     }
   </style>
 
@@ -111,6 +135,7 @@
         input.value = "";
         sentMsg.textContent = "Sent!";
         sentMsg.classList.add("visible");
+        releaseButterflies();
 
         setTimeout(() => {
           sentMsg.classList.remove("visible");
@@ -118,6 +143,23 @@
       } catch (err) {
         sentMsg.textContent = "Error: " + err.message;
         sentMsg.classList.add("visible");
+      }
+    }
+
+    function releaseButterflies() {
+      for (let i = 0; i < 10; i++) {
+        const butterfly = document.createElement('div');
+        butterfly.className = 'butterfly';
+        butterfly.textContent = '🦋';
+        butterfly.style.left = `${Math.random() * 100}%`;
+        butterfly.style.top = '80%';
+        butterfly.style.fontSize = `${Math.random() * 16 + 20}px`;
+        butterfly.style.animationDelay = `${Math.random()}s`;
+        document.body.appendChild(butterfly);
+
+        setTimeout(() => {
+          butterfly.remove();
+        }, 3000);
       }
     }
   </script>
