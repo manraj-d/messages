@@ -133,10 +133,10 @@
       if (!text) return;
 
       try {
-        await db.collection('messages').add({
-          message: text,
-          time: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        await db.collection('messages').doc('latest').set({
+  message: text,
+  time: firebase.firestore.FieldValue.serverTimestamp()
+});
         input.value = "";
         sentMsg.textContent = "Sent!";
         sentMsg.classList.add("visible");
