@@ -1,15 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Send a Message</title>
 
-  <!-- Firebase SDKs using the compat versions -->
+  <!-- Google Font for clean romantic vibe -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px 40px;
+      text-align: center;
+      color: #fff;
+      max-width: 300px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-weight: 500;
+      font-size: 22px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    button {
+      background-color: #ffffff;
+      color: #ff69b4;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ffe4ec;
+      transform: scale(1.05);
+    }
+  </style>
+
   <script>
-    // Your Firebase config (replace with your actual info)
     const firebaseConfig = {
       apiKey: "AIzaSyCgMZzUAymYd0wO4aPHmETgsbXp1JDRAXI",
       authDomain: "chayenne-rajji.firebaseapp.com",
@@ -20,11 +79,9 @@
       measurementId: "G-XY00XVRJSS"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Function to send a message
     async function sendMessage() {
       const input = document.getElementById('msgInput');
       const text = input.value.trim();
@@ -46,9 +103,11 @@
   </script>
 </head>
 
-<body style="font-family: sans-serif; margin: 20px;">
-  <h1>Send a Message</h1>
-  <input id="msgInput" type="text" placeholder="Type your message here" style="width: 200px;"/>
-  <button onclick="sendMessage()">Send</button>
+<body>
+  <div class="card">
+    <h1>💌 Send a Message 🦋</h1>
+    <input id="msgInput" type="text" placeholder="Write something lovely..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
 </body>
 </html>
