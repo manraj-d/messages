@@ -7,63 +7,65 @@
   <meta name="Generator" content="Cocoa HTML Writer">
   <meta name="CocoaVersion" content="2575.4">
   <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
   </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Send a Message&lt;/title&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Firebase SDKs --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"&gt;&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 1. Your Firebase config (replace with your actual info):</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const firebaseConfig = {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>apiKey: "YOUR_API_KEY",</p>
-<p class="p1"><span class="Apple-converted-space">      </span>authDomain: "YOUR_PROJECT_ID.firebaseapp.com",</p>
-<p class="p1"><span class="Apple-converted-space">      </span>projectId: "YOUR_PROJECT_ID",</p>
-<p class="p1"><span class="Apple-converted-space">      </span>storageBucket: "YOUR_PROJECT_ID.appspot.com",</p>
-<p class="p1"><span class="Apple-converted-space">      </span>messagingSenderId: "SENDER_ID",</p>
-<p class="p1"><span class="Apple-converted-space">      </span>appId: "APP_ID"</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 2. Initialize Firebase</p>
-<p class="p1"><span class="Apple-converted-space">    </span>firebase.initializeApp(firebaseConfig);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const db = firebase.firestore();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 3. Simple function to send a message</p>
-<p class="p1"><span class="Apple-converted-space">    </span>async function sendMessage() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const input = document.getElementById('msgInput');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const text = input.value.trim();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (!text) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>alert("Please type a message first!");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>await db.collection('messages').add({</p>
-<p class="p1"><span class="Apple-converted-space">          </span>message: text,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>time: firebase.firestore.FieldValue.serverTimestamp()</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>alert("Message sent!");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>input.value = "";</p>
-<p class="p1"><span class="Apple-converted-space">      </span>} catch (err) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>alert("Error sending message: " + err);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;body style="font-family: sans-serif; margin: 20px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;Send a Message&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;input id="msgInput" type="text" placeholder="Type your message here" style="width: 200px;"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="sendMessage()"&gt;Send&lt;/button&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;title&gt;Send a Message&lt;/title&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;!-- Firebase SDKs using the compat versions --&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"&gt;&lt;/script&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Your Firebase config (replace with your actual info)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const firebaseConfig = {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>apiKey: "AIzaSyCgMZzUAymYd0wO4aPHmETgsbXp1JDRAXI",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>authDomain: "chayenne-rajji.firebaseapp.com",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>projectId: "chayenne-rajji",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>storageBucket: "chayenne-rajji.firebasestorage.app",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>messagingSenderId: "862786577949",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>appId: "1:862786577949:web:c8c049b331b8c86f0908f4",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>measurementId: "G-XY00XVRJSS"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Initialize Firebase</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>firebase.initializeApp(firebaseConfig);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const db = firebase.firestore();</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Function to send a message</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>async function sendMessage() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const input = document.getElementById('msgInput');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const text = input.value.trim();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (!text) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>alert("Please type a message first!");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>await db.collection('messages').add({</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>message: text,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>time: firebase.firestore.FieldValue.serverTimestamp()</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>alert("Message sent!");</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>input.value = "";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>} catch (err) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>alert("Error sending message: " + err);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;body style="font-family: sans-serif; margin: 20px;"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;h1&gt;Send a Message&lt;/h1&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;input id="msgInput" type="text" placeholder="Type your message here" style="width: 200px;"/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;button onclick="sendMessage()"&gt;Send&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
 </body>
 </html>
