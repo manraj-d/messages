@@ -40,6 +40,7 @@
       text-align: center;
       color: #fff;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      z-index: 10;
     }
 
     h1 {
@@ -88,21 +89,25 @@
     }
 
     .butterfly {
-      position: absolute;
-      font-size: 24px;
-      animation: fly 3s ease-in-out forwards;
+      position: fixed;
       pointer-events: none;
-      z-index: 999;
+      opacity: 0;
+      z-index: 1;
+      transform: translateY(0);
     }
 
-    @keyframes fly {
+    @keyframes fadeFloat {
       0% {
-        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+        transform: translateY(20px) scale(0.9) rotate(0deg);
+      }
+      50% {
         opacity: 1;
+        transform: translateY(-10px) scale(1.05) rotate(5deg);
       }
       100% {
-        transform: translateY(-300px) rotate(360deg);
         opacity: 0;
+        transform: translateY(-100px) scale(0.9) rotate(-15deg);
       }
     }
   </style>
@@ -147,19 +152,29 @@
     }
 
     function releaseButterflies() {
-      for (let i = 0; i < 10; i++) {
+      const count = 100;
+
+      for (let i = 0; i < count; i++) {
         const butterfly = document.createElement('div');
         butterfly.className = 'butterfly';
         butterfly.textContent = '🦋';
-        butterfly.style.left = `${Math.random() * 100}%`;
-        butterfly.style.top = '80%';
-        butterfly.style.fontSize = `${Math.random() * 16 + 20}px`;
-        butterfly.style.animationDelay = `${Math.random()}s`;
+
+        butterfly.style.left = `${Math.random() * 100}vw`;
+        butterfly.style.top = `${Math.random() * 100}vh`;
+
+        const size = Math.random() * 20 + 20;
+        butterfly.style.fontSize = `${size}px`;
+
+        const duration = Math.random() * 5 + 3;
+        const delay = Math.random() * 2;
+
+        butterfly.style.animation = `fadeFloat ${duration}s ease-in-out ${delay}s forwards`;
+
         document.body.appendChild(butterfly);
 
         setTimeout(() => {
           butterfly.remove();
-        }, 3000);
+        }, (duration + delay) * 1000);
       }
     }
   </script>
