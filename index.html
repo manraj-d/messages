@@ -121,45 +121,46 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    async function sendMessage() {
-      const input = document.getElementById('msgInput');
-      const sentMsg = document.getElementById('sentMsg');
-      const text = input.value.trim();
-      if (!text) return;
+   async function sendMessage() {
+  const input = document.getElementById('msgInput');
+  const sentMsg = document.getElementById('sentMsg');
+  const text = input.value.trim();
+  if (!text) return;
 
-      try {
-        // Step 1: Set 'latest'
-        const latestRef = db.collection('messages').doc('latest');
-        await latestRef.set({
-          message: text,
-          time: firebase.firestore.FieldValue.serverTimestamp()
-        });
+  try {
+    // Step 1: Add to history first
+    const historyRef = await db.collection('messages').add({
+      message: text,
+      time: firebase.firestore.FieldValue.serverTimestamp()
+    });
 
-        // Step 2: Wait for resolved timestamp
-        const latestSnapshot = await latestRef.get();
-        const data = latestSnapshot.data();
-        const resolvedTime = data.time;
+    // Step 2: Wait for Firestore to fully save and return the actual timestamp
+    const savedDoc = await historyRef.get();
+    const savedData = savedDoc.data();
+    const realTimestamp = savedData.time;
 
-        // Step 3: Save to history with same timestamp
-        await db.collection('messages').add({
-          message: text,
-          time: resolvedTime
-        });
+    // Step 3: Save to 'latest' using that resolved timestamp
+    await db.collection('messages').doc('latest').set({
+      message: text,
+      time: realTimestamp
+    });
 
-        input.value = "";
-        sentMsg.textContent = "Sent!";
-        sentMsg.classList.add("visible");
-        releaseButterflies();
-        loadHistory();
+    // UI stuff
+    input.value = "";
+    sentMsg.textContent = "Sent!";
+    sentMsg.classList.add("visible");
+    releaseButterflies();
+    loadHistory();
 
-        setTimeout(() => {
-          sentMsg.classList.remove("visible");
-        }, 2000);
-      } catch (err) {
-        sentMsg.textContent = "Error: " + err.message;
-        sentMsg.classList.add("visible");
-      }
-    }
+    setTimeout(() => {
+      sentMsg.classList.remove("visible");
+    }, 2000);
+  } catch (err) {
+    sentMsg.textContent = "Error: " + err.message;
+    sentMsg.classList.add("visible");
+  }
+}
+
 
     async function loadHistory() {
       const historyDiv = document.getElementById('history');
