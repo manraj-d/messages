@@ -135,12 +135,12 @@
           time: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // Step 2: Wait for the real timestamp
+        // Step 2: Wait for resolved timestamp
         const latestSnapshot = await latestRef.get();
         const data = latestSnapshot.data();
         const resolvedTime = data.time;
 
-        // Step 3: Save to history with real timestamp
+        // Step 3: Save to history with same timestamp
         await db.collection('messages').add({
           message: text,
           time: resolvedTime
@@ -170,16 +170,22 @@
         .limit(10)
         .get();
 
+      const seen = new Set(); // protect against accidental doubles
+
       snapshot.forEach(doc => {
         const data = doc.data();
         const msg = data.message;
         const time = data.time?.toDate();
         const timeStr = time ? time.toLocaleString() : "No timestamp";
+        const uniqueKey = msg + timeStr;
 
-        const item = document.createElement("div");
-        item.style.marginBottom = "14px";
-        item.innerHTML = `💌 ${msg}<br><small style="opacity: 0.8;">${timeStr}</small>`;
-        historyDiv.appendChild(item);
+        if (!seen.has(uniqueKey)) {
+          seen.add(uniqueKey);
+          const item = document.createElement("div");
+          item.style.marginBottom = "14px";
+          item.innerHTML = `💌 ${msg}<br><small style="opacity: 0.8;">${timeStr}</small>`;
+          historyDiv.appendChild(item);
+        }
       });
     }
 
