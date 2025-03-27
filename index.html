@@ -78,6 +78,7 @@
       margin-right: 8px;
       cursor: pointer;
       opacity: 0.5;
+      transition: all 0.2s ease;
     }
 
     #emojiPicker div span.selected {
@@ -132,7 +133,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    let selectedEmoji = "💖"; // default emoji
+    let selectedEmoji = "🧜‍♀️"; // default emoji
 
     async function sendMessage() {
       const input = document.getElementById('msgInput');
@@ -253,7 +254,6 @@
         };
       });
 
-      // Highlight the first emoji as default
       emojis[0]?.classList.add("selected");
     };
   </script>
@@ -267,13 +267,13 @@
     <div id="emojiPicker" style="margin-bottom: 16px;">
       <span>Select mood:</span><br>
       <div style="font-size: 24px; margin-top: 8px;">
-        <span>💖</span>
-        <span>😜</span>
-        <span>😢</span>
+        <span>🧜‍♀️</span>
+        <span>🦋</span>
         <span>🤪</span>
-        <span>🔥</span>
-        <span>🫶</span>
-        <span>🧸</span>
+        <span>🎉</span>
+        <span>❤️‍🔥</span>
+        <span>👀</span>
+        <span>❗</span>
       </div>
     </div>
 
