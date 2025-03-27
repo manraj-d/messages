@@ -128,26 +128,29 @@
       if (!text) return;
 
       try {
-        const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-
-        // Save to history
-        await db.collection('messages').add({
+        // Step 1: Set 'latest'
+        const latestRef = db.collection('messages').doc('latest');
+        await latestRef.set({
           message: text,
-          time: timestamp
+          time: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // Update widget-friendly doc
-        await db.collection('messages').doc('latest').set({
+        // Step 2: Wait for the real timestamp
+        const latestSnapshot = await latestRef.get();
+        const data = latestSnapshot.data();
+        const resolvedTime = data.time;
+
+        // Step 3: Save to history with real timestamp
+        await db.collection('messages').add({
           message: text,
-          time: timestamp
+          time: resolvedTime
         });
 
         input.value = "";
         sentMsg.textContent = "Sent!";
         sentMsg.classList.add("visible");
         releaseButterflies();
-
-        loadHistory(); // Refresh messages
+        loadHistory();
 
         setTimeout(() => {
           sentMsg.classList.remove("visible");
