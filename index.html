@@ -74,6 +74,17 @@
       transform: scale(1.05);
     }
 
+    #emojiPicker div span {
+      margin-right: 8px;
+      cursor: pointer;
+      opacity: 0.5;
+    }
+
+    #emojiPicker div span.selected {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
     #sentMsg {
       margin-top: 12px;
       font-size: 14px;
@@ -121,83 +132,85 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-   async function sendMessage() {
-  const input = document.getElementById('msgInput');
-  const sentMsg = document.getElementById('sentMsg');
-  const text = input.value.trim();
-  if (!text) return;
+    let selectedEmoji = "💖"; // default emoji
 
-  try {
-    // Step 1: Add to history first
-    const historyRef = await db.collection('messages').add({
-      message: text,
-      time: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    async function sendMessage() {
+      const input = document.getElementById('msgInput');
+      const sentMsg = document.getElementById('sentMsg');
+      const text = input.value.trim();
+      if (!text) return;
 
-    // Step 2: Wait for Firestore to fully save and return the actual timestamp
-    const savedDoc = await historyRef.get();
-    const savedData = savedDoc.data();
-    const realTimestamp = savedData.time;
+      try {
+        // Step 1: Add to history first
+        const historyRef = await db.collection('messages').add({
+          message: text,
+          emoji: selectedEmoji,
+          time: firebase.firestore.FieldValue.serverTimestamp()
+        });
 
-    // Step 3: Save to 'latest' using that resolved timestamp
-    await db.collection('messages').doc('latest').set({
-      message: text,
-      time: realTimestamp
-    });
+        // Step 2: Wait for Firestore to return the real timestamp
+        const savedDoc = await historyRef.get();
+        const savedData = savedDoc.data();
+        const realTimestamp = savedData.time;
 
-    // UI stuff
-    input.value = "";
-    sentMsg.textContent = "Sent!";
-    sentMsg.classList.add("visible");
-    releaseButterflies();
-    loadHistory();
+        // Step 3: Save to 'latest'
+        await db.collection('messages').doc('latest').set({
+          message: text,
+          emoji: selectedEmoji,
+          time: realTimestamp
+        });
 
-    setTimeout(() => {
-      sentMsg.classList.remove("visible");
-    }, 2000);
-  } catch (err) {
-    sentMsg.textContent = "Error: " + err.message;
-    sentMsg.classList.add("visible");
-  }
-}
+        input.value = "";
+        sentMsg.textContent = "Sent!";
+        sentMsg.classList.add("visible");
+        releaseButterflies();
+        loadHistory();
 
+        setTimeout(() => {
+          sentMsg.classList.remove("visible");
+        }, 2000);
+      } catch (err) {
+        sentMsg.textContent = "Error: " + err.message;
+        sentMsg.classList.add("visible");
+      }
+    }
 
     async function loadHistory() {
-  const historyDiv = document.getElementById('history');
-  historyDiv.innerHTML = "<h3 style='margin-bottom: 10px;'>📜 Past Messages</h3>";
+      const historyDiv = document.getElementById('history');
+      historyDiv.innerHTML = "<h3 style='margin-bottom: 10px;'>📜 Past Messages</h3>";
 
-  const snapshot = await db.collection('messages')
-    .orderBy('time', 'desc')
-    .limit(10)
-    .get();
+      const snapshot = await db.collection('messages')
+        .orderBy('time', 'desc')
+        .limit(10)
+        .get();
 
-  const seen = new Set();
+      const seen = new Set();
 
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    const msg = data.message;
-    const time = data.time?.toDate();
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const msg = data.message;
+        const emoji = data.emoji || "💌";
+        const time = data.time?.toDate();
 
-    let formatted = "No timestamp";
-    if (time) {
-      const day = time.getDate();
-      const month = time.toLocaleString('default', { month: 'long' });
-      const hours = time.getHours();
-      const minutes = time.getMinutes().toString().padStart(2, '0');
-      formatted = `${day} ${month}, at ${hours}:${minutes}`;
+        let formatted = "No timestamp";
+        if (time) {
+          const day = time.getDate();
+          const month = time.toLocaleString('default', { month: 'long' });
+          const hours = time.getHours();
+          const minutes = time.getMinutes().toString().padStart(2, '0');
+          formatted = `${day} ${month}, at ${hours}:${minutes}`;
+        }
+
+        const uniqueKey = msg + formatted;
+        if (!seen.has(uniqueKey)) {
+          seen.add(uniqueKey);
+          const item = document.createElement("div");
+          item.style.marginBottom = "14px";
+          item.innerHTML = `${emoji} ${msg}<br><small style="opacity: 0.8;">${formatted}</small>`;
+          historyDiv.appendChild(item);
+        }
+      });
     }
-
-    const uniqueKey = msg + formatted;
-    if (!seen.has(uniqueKey)) {
-      seen.add(uniqueKey);
-      const item = document.createElement("div");
-      item.style.marginBottom = "14px";
-      item.innerHTML = `💌 ${msg}<br><small style="opacity: 0.8;">${formatted}</small>`;
-      historyDiv.appendChild(item);
-    }
-  });
-}
-
 
     function releaseButterflies() {
       const count = 100;
@@ -226,7 +239,23 @@
       }
     }
 
-    window.onload = loadHistory;
+    window.onload = () => {
+      loadHistory();
+
+      const emojiContainer = document.querySelector('#emojiPicker div');
+      const emojis = emojiContainer.querySelectorAll("span");
+
+      emojis.forEach(emoji => {
+        emoji.onclick = () => {
+          selectedEmoji = emoji.textContent;
+          emojis.forEach(e => e.classList.remove("selected"));
+          emoji.classList.add("selected");
+        };
+      });
+
+      // Highlight the first emoji as default
+      emojis[0]?.classList.add("selected");
+    };
   </script>
 </head>
 
@@ -234,6 +263,20 @@
   <div class="card">
     <h1>💌 Send a Message 🦋</h1>
     <input id="msgInput" type="text" placeholder="What do you wanna say?" />
+
+    <div id="emojiPicker" style="margin-bottom: 16px;">
+      <span>Select mood:</span><br>
+      <div style="font-size: 24px; margin-top: 8px;">
+        <span>💖</span>
+        <span>😜</span>
+        <span>😢</span>
+        <span>🤪</span>
+        <span>🔥</span>
+        <span>🫶</span>
+        <span>🧸</span>
+      </div>
+    </div>
+
     <button onclick="sendMessage()">Send</button>
     <div id="sentMsg"></div>
     <div id="history"></div>
