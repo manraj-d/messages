@@ -163,32 +163,41 @@
 
 
     async function loadHistory() {
-      const historyDiv = document.getElementById('history');
-      historyDiv.innerHTML = "<h3 style='margin-bottom: 10px;'>📜 Past Messages</h3>";
+  const historyDiv = document.getElementById('history');
+  historyDiv.innerHTML = "<h3 style='margin-bottom: 10px;'>📜 Past Messages</h3>";
 
-      const snapshot = await db.collection('messages')
-        .orderBy('time', 'desc')
-        .limit(10)
-        .get();
+  const snapshot = await db.collection('messages')
+    .orderBy('time', 'desc')
+    .limit(10)
+    .get();
 
-      const seen = new Set(); // protect against accidental doubles
+  const seen = new Set();
 
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const msg = data.message;
-        const time = data.time?.toDate();
-        const timeStr = time ? time.toLocaleString() : "No timestamp";
-        const uniqueKey = msg + timeStr;
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    const msg = data.message;
+    const time = data.time?.toDate();
 
-        if (!seen.has(uniqueKey)) {
-          seen.add(uniqueKey);
-          const item = document.createElement("div");
-          item.style.marginBottom = "14px";
-          item.innerHTML = `💌 ${msg}<br><small style="opacity: 0.8;">${timeStr}</small>`;
-          historyDiv.appendChild(item);
-        }
-      });
+    let formatted = "No timestamp";
+    if (time) {
+      const day = time.getDate();
+      const month = time.toLocaleString('default', { month: 'long' });
+      const hours = time.getHours();
+      const minutes = time.getMinutes().toString().padStart(2, '0');
+      formatted = `${day} ${month}, at ${hours}:${minutes}`;
     }
+
+    const uniqueKey = msg + formatted;
+    if (!seen.has(uniqueKey)) {
+      seen.add(uniqueKey);
+      const item = document.createElement("div");
+      item.style.marginBottom = "14px";
+      item.innerHTML = `💌 ${msg}<br><small style="opacity: 0.8;">${formatted}</small>`;
+      historyDiv.appendChild(item);
+    }
+  });
+}
+
 
     function releaseButterflies() {
       const count = 100;
